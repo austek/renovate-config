@@ -1,0 +1,82 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":configMigration",
+    ":separateMultipleMajorReleases"
+  ],
+  "schedule": [
+    "before 5am on monday"
+  ],
+  "automerge": false,
+  "dependencyDashboard": true,
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "minimumReleaseAge": "7 days",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "description": "Renovate's defaults already bypass 'schedule' and 'minimumReleaseAge' here, so a CVE fix is not held back to Monday",
+    "labels": [
+      "dependencies",
+      "renovate",
+      "security"
+    ]
+  },
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "packageRules": [
+    {
+      "description": "config:recommended maps depType 'dependencies' to 'fix', which in a release-on-commit-type repo publishes an artifact. Releasing must be opt-in, so reset everything to 'chore'; repos that publish re-enable 'fix' for their own runtime dependencies, listed exactly.",
+      "matchPackageNames": [
+        "*"
+      ],
+      "semanticCommitType": "chore"
+    },
+    {
+      "description": "Build tooling never reaches users, so its updates must not trigger a release",
+      "matchManagers": [
+        "github-actions",
+        "gradle-wrapper",
+        "sbt"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "groupName": "build tooling",
+      "semanticCommitType": "chore"
+    },
+    {
+      "matchDepTypes": [
+        "plugin"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "build tooling",
+      "semanticCommitType": "chore"
+    },
+    {
+      "description": "Test-only libraries are not part of any published artifact",
+      "matchDepTypes": [
+        "test",
+        "devDependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "build and test dependencies",
+      "semanticCommitType": "chore"
+    }
+  ]
+}
