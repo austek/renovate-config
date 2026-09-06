@@ -7,7 +7,7 @@
     ":separateMultipleMajorReleases"
   ],
   "schedule": [
-    "before 5am on monday"
+    "before 5am"
   ],
   "automerge": false,
   "dependencyDashboard": true,
@@ -77,6 +77,25 @@
       ],
       "groupName": "build and test dependencies",
       "semanticCommitType": "chore"
+    },
+    {
+      "description": "First-party ZirekHQ artifacts (crates, wheels, npm/Maven/Go packages published from other ZirekHQ repos, and internal reusable GitHub Actions workflows) carry no third-party supply-chain risk -- skip the release-age wait and group them for one combined review.",
+      "matchSourceUrls": [
+        "https://github.com/ZirekHQ/**"
+      ],
+      "minimumReleaseAge": "0 days",
+      "groupName": "ZirekHQ artifacts"
+    },
+    {
+      "description": "Auto-merge first-party patch/minor bumps once CI passes -- the org controls both ends of the dependency, so review overhead outweighs the risk for non-breaking bumps. Major bumps still need a manual look.",
+      "matchSourceUrls": [
+        "https://github.com/ZirekHQ/**"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "automerge": true
     }
   ]
 }
