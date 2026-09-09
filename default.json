@@ -10,7 +10,9 @@
     "before 5am"
   ],
   "automerge": false,
-  "dependencyDashboard": true,
+  "automergeStrategy": "squash",
+  "platformAutomerge": true,
+  "dependencyDashboard": false,
   "labels": [
     "dependencies",
     "renovate"
@@ -30,6 +32,12 @@
   "semanticCommits": "enabled",
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "extends": [
+      "schedule:monthly"
+    ]
+  },
   "packageRules": [
     {
       "description": "config:recommended maps depType 'dependencies' to 'fix', which in a release-on-commit-type repo publishes an artifact. Releasing must be opt-in, so reset everything to 'chore'; repos that publish re-enable 'fix' for their own runtime dependencies, listed exactly.",
@@ -39,10 +47,19 @@
       "semanticCommitType": "chore"
     },
     {
+      "description": "Bundle everything else's minor/patch bumps into one PR to cut noise; majors stay separate for review. Placed before the build-tooling/test-dep rules below so those keep their own distinct group names instead of falling in here.",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "non-major dependencies"
+    },
+    {
       "description": "Build tooling never reaches users, so its updates must not trigger a release",
       "matchManagers": [
         "github-actions",
         "gradle-wrapper",
+        "maven-wrapper",
         "sbt"
       ],
       "matchUpdateTypes": [
@@ -53,6 +70,18 @@
       ],
       "groupName": "build tooling",
       "semanticCommitType": "chore"
+    },
+    {
+      "description": "GitHub Actions digest/pin bumps are hash-only, not new code -- safe to merge unattended for any repo, not just ZirekHQ's",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "digest",
+        "pin"
+      ],
+      "automerge": true,
+      "automergeType": "branch"
     },
     {
       "matchDepTypes": [
@@ -95,7 +124,8 @@
         "patch",
         "minor"
       ],
-      "automerge": true
+      "automerge": true,
+      "automergeType": "branch"
     }
   ]
 }
