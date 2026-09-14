@@ -12,6 +12,7 @@
   "automerge": false,
   "automergeStrategy": "squash",
   "platformAutomerge": true,
+  "rebaseWhen": "behind-base-branch",
   "dependencyDashboard": false,
   "labels": [
     "dependencies",
@@ -47,12 +48,14 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "Bundle everything else's minor/patch bumps into one PR to cut noise; majors stay separate for review. Placed before the build-tooling/test-dep rules below so those keep their own distinct group names instead of falling in here.",
+      "description": "Bundle everything else's minor/patch bumps into one PR to cut noise, and auto-merge once CI passes -- majors stay separate for manual review. Placed before the build-tooling/test-dep rules below so those keep their own distinct group names instead of falling in here.",
       "matchUpdateTypes": [
         "minor",
         "patch"
       ],
-      "groupName": "non-major dependencies"
+      "groupName": "non-major dependencies",
+      "automerge": true,
+      "automergeType": "branch"
     },
     {
       "description": "Build tooling never reaches users, so its updates must not trigger a release",
