@@ -55,7 +55,7 @@
       ],
       "groupName": "non-major dependencies",
       "automerge": true,
-      "automergeType": "branch"
+      "automergeType": "pr"
     },
     {
       "description": "Build tooling never reaches users, so its updates must not trigger a release",
@@ -84,7 +84,7 @@
         "pin"
       ],
       "automerge": true,
-      "automergeType": "branch"
+      "automergeType": "pr"
     },
     {
       "matchDepTypes": [
@@ -128,7 +128,7 @@
         "minor"
       ],
       "automerge": true,
-      "automergeType": "branch"
+      "automergeType": "pr"
     }
   ]
 }

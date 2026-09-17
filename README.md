@@ -20,7 +20,8 @@ publish an artifact belongs there, not here.
 
 ## What the preset sets
 
-- Daily schedule, no dashboard, no automerge.
+- Daily schedule, no dashboard. Major updates never automerge; matching
+  minor/patch updates do, per the groups below.
 - A 7-day `minimumReleaseAge`, so a compromised release has time to be yanked
   before it is proposed. Vulnerability fixes bypass this.
 - `semanticCommits` with everything defaulting to `chore`. `config:recommended`
@@ -30,9 +31,12 @@ publish an artifact belongs there, not here.
 - Every other minor/patch update grouped into one `non-major dependencies` PR;
   majors stay ungrouped so each gets individual review.
 - GitHub Actions digest/pin bumps automerge for every repo (hash-only, no new
-  code). ZirekHQ patch/minor bumps automerge too. Both skip the PR entirely
-  via `automergeType: branch` and merge natively through GitHub
-  (`platformAutomerge`) once checks pass.
+  code). ZirekHQ patch/minor bumps automerge too. Both open a PR and merge it
+  automatically via GitHub's native auto-merge (`platformAutomerge`) once
+  checks -- and, where required, review -- pass. `automergeType: branch`
+  (direct push, no PR) was tried first but stalls forever on any repo whose
+  base branch requires PR reviews or `pull_request`-triggered status checks,
+  since those checks never fire without a PR to attach to.
 - Monthly `lockFileMaintenance`, so transitive/lockfile versions don't rot
   between direct-dependency bumps.
 
