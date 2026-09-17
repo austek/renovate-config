@@ -20,7 +20,8 @@ publish an artifact belongs there, not here.
 
 ## What the preset sets
 
-- Daily schedule, no dashboard, no automerge.
+- Daily schedule, no dashboard. Major updates never automerge; matching
+  minor/patch updates do, per the groups below.
 - A 7-day `minimumReleaseAge`, so a compromised release has time to be yanked
   before it is proposed. Vulnerability fixes bypass this.
 - `semanticCommits` with everything defaulting to `chore`. `config:recommended`
