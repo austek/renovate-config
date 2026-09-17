@@ -1,0 +1,36 @@
+reviews:
+  path_filters:
+    - "!.gitignore"
+
+  instructions: |
+    This repo publishes a single Renovate preset (default.json), extended by
+    other repos via `extends: ["github>austek/renovate-config"]`. Treat
+    default.json as the primary review target and README.md as its contract
+    with consumers -- flag drift between the two.
+
+  path_instructions:
+    - path: "default.json"
+      instructions: |
+        - Any packageRule with `automergeType: branch` merges directly to the
+          base branch, bypassing pull requests entirely. Flag it unless the
+          rule's description states this is intentional -- on a repo whose
+          base branch requires PR reviews or status checks that only trigger
+          on `pull_request` events, `branch` automerge stalls forever with no
+          error surfaced. Prefer `automergeType: pr` with
+          `platformAutomerge: true`, which lets GitHub's native auto-merge
+          honor branch protection instead of fighting it.
+        - Renovate merges matching packageRules in array order, with later
+          rules' explicit fields overriding earlier ones for the same
+          package. Check that a new or edited rule's `matchUpdateTypes` /
+          `matchManagers` / `matchDepTypes` don't unintentionally inherit (or
+          fail to inherit) `automerge/automergeType` from an earlier rule in
+          a way that contradicts the new rule's own description.
+        - `minimumReleaseAge` and `vulnerabilityAlerts` interact: confirm any
+          change here still lets vulnerability fixes bypass the release-age
+          wait, per the existing `vulnerabilityAlerts.description` note.
+
+    - path: "README.md"
+      instructions: |
+        - The "What the preset sets" section is a plain-English mirror of
+          default.json. If default.json's automerge behavior, schedule, or
+          grouping changes, this section must change with it in the same PR.
