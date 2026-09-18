@@ -23,7 +23,7 @@
   "minimumReleaseAge": "7 days",
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
-    "description": "Renovate's defaults already bypass 'schedule' and 'minimumReleaseAge' here, so a CVE fix is not held back to Monday",
+    "description": "Bypasses 'schedule' and 'minimumReleaseAge' by default, so a CVE fix isn't held back",
     "labels": [
       "dependencies",
       "renovate",
@@ -41,14 +41,14 @@
   },
   "packageRules": [
     {
-      "description": "config:recommended maps depType 'dependencies' to 'fix', which in a release-on-commit-type repo publishes an artifact. Releasing must be opt-in, so reset everything to 'chore'; repos that publish re-enable 'fix' for their own runtime dependencies, listed exactly.",
+      "description": "config:recommended maps depType 'dependencies' to 'fix', which publishes a release. Reset to 'chore'; publishing repos re-enable 'fix' explicitly for their own runtime deps.",
       "matchPackageNames": [
         "*"
       ],
       "semanticCommitType": "chore"
     },
     {
-      "description": "Bundle everything else's minor/patch bumps into one PR to cut noise, and auto-merge once CI passes -- majors stay separate for manual review. Placed before the build-tooling/test-dep rules below so those keep their own distinct group names instead of falling in here.",
+      "description": "Bundle minor/patch bumps into one PR, automerge after CI -- majors stay separate for manual review. Placed before the build-tooling/test-dep rules so those keep their own group names.",
       "matchUpdateTypes": [
         "minor",
         "patch"
@@ -58,7 +58,7 @@
       "automergeType": "pr"
     },
     {
-      "description": "Build tooling never reaches users, so its updates must not trigger a release",
+      "description": "Build tooling never reaches users, so its updates never trigger a release",
       "matchManagers": [
         "github-actions",
         "gradle-wrapper",
@@ -75,7 +75,7 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "GitHub Actions digest/pin bumps are hash-only, not new code -- safe to merge unattended for any repo, not just ZirekHQ's",
+      "description": "Digest/pin bumps are hash-only, not new code -- safe to merge unattended for any repo",
       "matchManagers": [
         "github-actions"
       ],
@@ -98,7 +98,7 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "Test-only libraries are not part of any published artifact",
+      "description": "Test-only deps aren't part of any published artifact",
       "matchDepTypes": [
         "test",
         "devDependencies"
@@ -111,7 +111,7 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "First-party ZirekHQ artifacts (crates, wheels, npm/Maven/Go packages published from other ZirekHQ repos, and internal reusable GitHub Actions workflows) carry no third-party supply-chain risk -- skip the release-age wait and group them for one combined review.",
+      "description": "First-party ZirekHQ artifacts carry no third-party supply-chain risk -- skip the release-age wait and group for one combined review.",
       "matchSourceUrls": [
         "https://github.com/ZirekHQ/**"
       ],
@@ -119,7 +119,7 @@
       "groupName": "ZirekHQ artifacts"
     },
     {
-      "description": "Auto-merge first-party patch/minor bumps once CI passes -- the org controls both ends of the dependency, so review overhead outweighs the risk for non-breaking bumps. Major bumps still need a manual look.",
+      "description": "Automerge first-party patch/minor bumps once CI passes -- the org controls both ends, so review overhead outweighs the risk. Majors still need a manual look.",
       "matchSourceUrls": [
         "https://github.com/ZirekHQ/**"
       ],
