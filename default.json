@@ -48,12 +48,21 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "Bundle minor/patch bumps into one PR, automerge after CI -- majors stay separate for manual review. Placed before the build-tooling/test-dep rules so those keep their own group names.",
+      "description": "Bundle minor/patch bumps into one PR, automerge after CI. Placed before the build-tooling/test-dep rules so those keep their own group names.",
       "matchUpdateTypes": [
         "minor",
         "patch"
       ],
       "groupName": "non-major dependencies",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Bundle majors into one PR too. Automerge relies on platformAutomerge, so a repo requiring PR approval still waits on a human before merging.",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "major dependencies",
       "automerge": true,
       "automergeType": "pr"
     },
