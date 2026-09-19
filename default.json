@@ -7,7 +7,7 @@
     ":separateMultipleMajorReleases"
   ],
   "schedule": [
-    "before 5am"
+    "at any time"
   ],
   "automerge": false,
   "automergeStrategy": "squash",
