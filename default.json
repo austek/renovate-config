@@ -39,6 +39,14 @@
       "schedule:monthly"
     ]
   },
+  "pre-commit": {
+    "enabled": true
+  },
+  "pip_requirements": {
+    "managerFilePatterns": [
+      "/(^|/)requirements[\\w.-]*\\.txt$/"
+    ]
+  },
   "packageRules": [
     {
       "description": "config:recommended maps depType 'dependencies' to 'fix', which publishes a release. Reset to 'chore'; publishing repos re-enable 'fix' explicitly for their own runtime deps.",
@@ -138,6 +146,13 @@
       ],
       "automerge": true,
       "automergeType": "pr"
+    },
+    {
+      "description": "Docker tags for the zizmor image carry no release timestamp, so minimumReleaseAge would hold every bump as pending forever.",
+      "matchPackageNames": [
+        "ghcr.io/zizmorcore/zizmor"
+      ],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
     }
   ]
 }
