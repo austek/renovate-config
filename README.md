@@ -40,6 +40,13 @@ publish an artifact belongs there, not here.
   since those checks never fire without a PR to attach to.
 - Monthly `lockFileMaintenance`, so transitive/lockfile versions don't rot
   between direct-dependency bumps.
+- The `pre-commit` manager is on, so hook `rev`s in `.pre-commit-config.yaml`
+  get bumped like any other dependency. Renovate leaves it off by default.
+- `pip_requirements` matches any `requirements*.txt`, including multi-part names
+  like `requirements-test-e2e.txt` that the default pattern skips.
+- The `ghcr.io/zizmorcore/zizmor` image uses `minimumReleaseAgeBehaviour:
+  timestamp-optional`. Docker tags carry no release timestamp, so the 7-day
+  age check would otherwise hold its bumps as pending forever.
 
 ## What it deliberately leaves out
 
