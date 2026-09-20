@@ -3,22 +3,21 @@
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
-    ":configMigration",
-    ":separateMultipleMajorReleases"
+    ":configMigration"
   ],
   "schedule": [
     "at any time"
   ],
   "automerge": false,
   "automergeStrategy": "squash",
-  "platformAutomerge": true,
+  "platformAutomerge": false,
   "rebaseWhen": "behind-base-branch",
   "dependencyDashboard": false,
   "labels": [
     "dependencies",
     "renovate"
   ],
-  "prConcurrentLimit": 3,
+  "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "minimumReleaseAge": "7 days",
   "osvVulnerabilityAlerts": true,
@@ -37,7 +36,9 @@
     "enabled": true,
     "extends": [
       "schedule:monthly"
-    ]
+    ],
+    "automerge": true,
+    "automergeType": "pr"
   },
   "pre-commit": {
     "enabled": true
@@ -56,17 +57,25 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "Bundle minor/patch bumps into one PR, automerge after CI. Placed before the build-tooling/test-dep rules so those keep their own group names.",
+      "description": "Patches group apart from minors so one breaking minor can't block them. Placed before the build-tooling/test-dep rules so those keep their own group names.",
       "matchUpdateTypes": [
-        "minor",
         "patch"
       ],
-      "groupName": "non-major dependencies",
+      "groupName": "patch dependencies",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "description": "Bundle majors into one PR too. Automerge relies on platformAutomerge, so a repo requiring PR approval still waits on a human before merging.",
+      "description": "Placed before the build-tooling/test-dep rules so those keep their own group names.",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "minor dependencies",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Bundle majors into one PR.",
       "matchUpdateTypes": [
         "major"
       ],
@@ -75,7 +84,7 @@
       "automergeType": "pr"
     },
     {
-      "description": "Build tooling never reaches users, so its updates never trigger a release",
+      "description": "Build tooling never reaches users; grouped apart from runtime dependencies.",
       "matchManagers": [
         "github-actions",
         "gradle-wrapper",
@@ -88,8 +97,7 @@
         "digest",
         "pin"
       ],
-      "groupName": "build tooling",
-      "semanticCommitType": "chore"
+      "groupName": "build tooling"
     },
     {
       "description": "Digest/pin bumps are hash-only, not new code -- safe to merge unattended for any repo",
@@ -104,6 +112,7 @@
       "automergeType": "pr"
     },
     {
+      "description": "Build plugins are grouped with build tooling.",
       "matchDepTypes": [
         "plugin"
       ],
@@ -111,8 +120,7 @@
         "minor",
         "patch"
       ],
-      "groupName": "build tooling",
-      "semanticCommitType": "chore"
+      "groupName": "build tooling"
     },
     {
       "description": "Test-only deps aren't part of any published artifact",
@@ -124,11 +132,10 @@
         "minor",
         "patch"
       ],
-      "groupName": "build and test dependencies",
-      "semanticCommitType": "chore"
+      "groupName": "build and test dependencies"
     },
     {
-      "description": "First-party ZirekHQ artifacts carry no third-party supply-chain risk -- skip the release-age wait and group for one combined review.",
+      "description": "First-party ZirekHQ artifacts carry no third-party supply-chain risk -- skip the release-age wait and group into one PR.",
       "matchSourceUrls": [
         "https://github.com/ZirekHQ/**"
       ],
@@ -136,13 +143,9 @@
       "groupName": "ZirekHQ artifacts"
     },
     {
-      "description": "Automerge first-party patch/minor bumps once CI passes -- the org controls both ends, so review overhead outweighs the risk. Majors still need a manual look.",
+      "description": "Automerge every first-party bump once CI passes -- the org controls both ends, so review overhead outweighs the risk.",
       "matchSourceUrls": [
         "https://github.com/ZirekHQ/**"
-      ],
-      "matchUpdateTypes": [
-        "patch",
-        "minor"
       ],
       "automerge": true,
       "automergeType": "pr"
