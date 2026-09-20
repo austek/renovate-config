@@ -95,7 +95,8 @@
         "minor",
         "patch",
         "digest",
-        "pin"
+        "pin",
+        "pinDigest"
       ],
       "groupName": "build tooling"
     },
@@ -106,7 +107,8 @@
       ],
       "matchUpdateTypes": [
         "digest",
-        "pin"
+        "pin",
+        "pinDigest"
       ],
       "automerge": true,
       "automergeType": "pr"
