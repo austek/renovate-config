@@ -10,7 +10,7 @@
   ],
   "automerge": false,
   "automergeStrategy": "squash",
-  "platformAutomerge": false,
+  "platformAutomerge": true,
   "rebaseWhen": "behind-base-branch",
   "dependencyDashboard": false,
   "labels": [
