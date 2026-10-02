@@ -137,17 +137,21 @@
       "groupName": "build and test dependencies"
     },
     {
-      "description": "First-party ZirekHQ artifacts carry no third-party supply-chain risk -- skip the release-age wait and group into one PR.",
+      "description": "First-party artifacts (ZirekHQ, hominux, compress4j) carry no third-party supply-chain risk -- skip the release-age wait and group into one PR.",
       "matchSourceUrls": [
-        "https://github.com/ZirekHQ/**"
+        "https://github.com/ZirekHQ/**",
+        "https://github.com/hominux/**",
+        "https://github.com/compress4j/**"
       ],
       "minimumReleaseAge": "0 days",
-      "groupName": "ZirekHQ artifacts"
+      "groupName": "first-party artifacts"
     },
     {
       "description": "Automerge every first-party bump once CI passes -- the org controls both ends, so review overhead outweighs the risk.",
       "matchSourceUrls": [
-        "https://github.com/ZirekHQ/**"
+        "https://github.com/ZirekHQ/**",
+        "https://github.com/hominux/**",
+        "https://github.com/compress4j/**"
       ],
       "automerge": true,
       "automergeType": "pr"
