@@ -36,7 +36,8 @@ publish an artifact belongs there, not here.
 - Each dependency jumps straight to its latest major instead of stepping
   through every intermediate one.
 - GitHub Actions digest/pin bumps automerge for every repo (hash-only, no new
-  code). ZirekHQ bumps automerge too. Both open a PR and Renovate
+  code). ZirekHQ, hominux and compress4j bumps automerge too. They group into one
+  `first-party artifacts` PR and skip the seven-day `minimumReleaseAge`. Both open a PR and Renovate
   merges it through the API (`platformAutomerge: false`) once checks pass.
   The Renovate app must be a ruleset bypass actor on any repo that requires
   reviews, or its PRs wait for a human approval. `automergeType: branch`
