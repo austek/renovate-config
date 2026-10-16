@@ -53,6 +53,9 @@ publish an artifact belongs there, not here.
 - The `ghcr.io/zizmorcore/zizmor` image uses `minimumReleaseAgeBehaviour:
   timestamp-optional`. Docker tags carry no release timestamp, so the 7-day
   age check would otherwise hold its bumps as pending forever.
+  `zizmorcore/zizmor-action` is grouped with that image as `zizmor` and uses
+  `minimumReleaseAge: 0 days`, so the action that knows a zizmor version
+  arrives with it.
 
 ## What it deliberately leaves out
 
