@@ -162,6 +162,15 @@
         "ghcr.io/zizmorcore/zizmor"
       ],
       "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "zizmor-action only accepts the zizmor versions bundled with its own release, and the image bumps with no release-age wait (rule above). Release the action without the wait and group both so one PR carries a matching pair.",
+      "matchPackageNames": [
+        "zizmorcore/zizmor-action",
+        "ghcr.io/zizmorcore/zizmor"
+      ],
+      "minimumReleaseAge": "0 days",
+      "groupName": "zizmor"
     }
   ]
 }
