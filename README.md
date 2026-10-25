@@ -44,8 +44,10 @@ publish an artifact belongs there, not here.
   (direct push, no PR) was tried first but stalls forever on any repo whose
   base branch requires PR reviews or `pull_request`-triggered status checks,
   since those checks never fire without a PR to attach to.
-- Monthly `lockFileMaintenance` that automerges once checks pass, so
+- Weekly `lockFileMaintenance` that automerges once checks pass, so
   transitive/lockfile versions don't rot between direct-dependency bumps.
+  Renovate's vulnerability alerts only cover extracted (declared) packages, so
+  this is the only path that moves a vulnerable transitive crate.
 - The `pre-commit` manager is on, so hook `rev`s in `.pre-commit-config.yaml`
   get bumped like any other dependency. Renovate leaves it off by default.
 - `pip_requirements` matches any `requirements*.txt`, including multi-part names
