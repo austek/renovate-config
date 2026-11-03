@@ -3,10 +3,8 @@
   "extends": [
     "config:recommended",
     "helpers:pinGitHubActionDigests",
-    ":configMigration"
-  ],
-  "schedule": [
-    "at any time"
+    ":configMigration",
+    "schedule:weekly"
   ],
   "automerge": false,
   "automergeStrategy": "squash",
@@ -34,9 +32,6 @@
   "semanticCommitScope": "deps",
   "lockFileMaintenance": {
     "enabled": true,
-    "extends": [
-      "schedule:weekly"
-    ],
     "automerge": true,
     "automergeType": "pr"
   },
@@ -57,20 +52,15 @@
       "semanticCommitType": "chore"
     },
     {
-      "description": "Patches group apart from minors so one breaking minor can't block them. Placed before the build-tooling/test-dep rules so those keep their own group names.",
+      "description": "One PR per cycle for every non-major update, build tooling and test deps included.",
       "matchUpdateTypes": [
-        "patch"
+        "minor",
+        "patch",
+        "digest",
+        "pin",
+        "pinDigest"
       ],
-      "groupName": "patch dependencies",
-      "automerge": true,
-      "automergeType": "pr"
-    },
-    {
-      "description": "Placed before the build-tooling/test-dep rules so those keep their own group names.",
-      "matchUpdateTypes": [
-        "minor"
-      ],
-      "groupName": "minor dependencies",
+      "groupName": "non-major dependencies",
       "automerge": true,
       "automergeType": "pr"
     },
@@ -82,59 +72,6 @@
       "groupName": "major dependencies",
       "automerge": true,
       "automergeType": "pr"
-    },
-    {
-      "description": "Build tooling never reaches users; grouped apart from runtime dependencies.",
-      "matchManagers": [
-        "github-actions",
-        "gradle-wrapper",
-        "maven-wrapper",
-        "sbt"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "digest",
-        "pin",
-        "pinDigest"
-      ],
-      "groupName": "build tooling"
-    },
-    {
-      "description": "Digest/pin bumps are hash-only, not new code -- safe to merge unattended for any repo",
-      "matchManagers": [
-        "github-actions"
-      ],
-      "matchUpdateTypes": [
-        "digest",
-        "pin",
-        "pinDigest"
-      ],
-      "automerge": true,
-      "automergeType": "pr"
-    },
-    {
-      "description": "Build plugins are grouped with build tooling.",
-      "matchDepTypes": [
-        "plugin"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "groupName": "build tooling"
-    },
-    {
-      "description": "Test-only deps aren't part of any published artifact",
-      "matchDepTypes": [
-        "test",
-        "devDependencies"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "groupName": "build and test dependencies"
     },
     {
       "description": "First-party artifacts (ZirekHQ, hominux, compress4j) carry no third-party supply-chain risk -- skip the release-age wait and group into one PR.",

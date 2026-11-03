@@ -20,23 +20,20 @@ publish an artifact belongs there, not here.
 
 ## What the preset sets
 
-- No schedule (`prHourlyLimit` and `prConcurrentLimit` cap the volume), no
-  dashboard. Patch, minor and major updates automerge once checks pass, as do
-  GitHub Actions digest/pin bumps.
+- `schedule:weekly` (Monday before 4am), no dashboard. `prHourlyLimit` and
+  `prConcurrentLimit` cap the volume. Non-major and major updates automerge once
+  checks pass. Vulnerability fixes bypass the schedule.
 - A 7-day `minimumReleaseAge`, so a compromised release has time to be yanked
   before it is proposed. Vulnerability fixes bypass this.
 - `semanticCommits` with everything defaulting to `chore`. `config:recommended`
   maps `depType: dependencies` to `fix`, which in a release-on-commit-type
   repository publishes an artifact — so releasing is opt-in.
-- Build tooling, plugins and test-only dependencies get their own groups for
-  minor/patch bumps; their majors land in `major dependencies`.
-- Every other update grouped by type: `patch dependencies`, `minor dependencies`
-  and `major dependencies`, so a breaking minor or major bump doesn't hold up
-  safe patches.
+- Two groups: `non-major dependencies` (minor, patch, digest, pin) and
+  `major dependencies`. A failing non-major bump holds the whole group until
+  fixed or ignored.
 - Each dependency jumps straight to its latest major instead of stepping
   through every intermediate one.
-- GitHub Actions digest/pin bumps automerge for every repo (hash-only, no new
-  code). ZirekHQ, hominux and compress4j bumps automerge too. They group into one
+- ZirekHQ, hominux and compress4j bumps automerge and group into one
   `first-party artifacts` PR and skip the seven-day `minimumReleaseAge`. Both open a PR and Renovate
   merges it through the API (`platformAutomerge: false`) once checks pass.
   The Renovate app must be a ruleset bypass actor on any repo that requires
@@ -44,7 +41,7 @@ publish an artifact belongs there, not here.
   (direct push, no PR) was tried first but stalls forever on any repo whose
   base branch requires PR reviews or `pull_request`-triggered status checks,
   since those checks never fire without a PR to attach to.
-- Weekly `lockFileMaintenance` that automerges once checks pass, so
+- `lockFileMaintenance` runs in the weekly window and automerges once checks pass, so
   transitive/lockfile versions don't rot between direct-dependency bumps.
   Renovate's vulnerability alerts only cover extracted (declared) packages, so
   this is the only path that moves a vulnerable transitive crate.
