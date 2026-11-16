@@ -74,14 +74,18 @@
       "automergeType": "pr"
     },
     {
-      "description": "First-party artifacts (ZirekHQ, hominux, compress4j) carry no third-party supply-chain risk -- skip the release-age wait and group into one PR.",
+      "description": "First-party artifacts (ZirekHQ, hominux, compress4j) carry no third-party supply-chain risk -- skip the release-age wait and the weekly window, group into one PR, and open it ahead of other PRs under the rate limits.",
       "matchSourceUrls": [
         "https://github.com/ZirekHQ/**",
         "https://github.com/hominux/**",
         "https://github.com/compress4j/**"
       ],
       "minimumReleaseAge": "0 days",
-      "groupName": "first-party artifacts"
+      "schedule": [
+        "at any time"
+      ],
+      "groupName": "first-party artifacts",
+      "prPriority": 10
     },
     {
       "description": "Automerge every first-party bump once CI passes -- the org controls both ends, so review overhead outweighs the risk.",
