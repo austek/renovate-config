@@ -38,9 +38,10 @@ publish an artifact belongs there, not here.
   weekly window, and carry a higher `prPriority` so they open first under the PR
   limits. Renovate opens a PR and enables native auto-merge
   (`platformAutomerge: true`), so it merges once checks pass. Each consuming
-  repository must mark at least one status check as required in its branch
-  protection or ruleset. Without one, GitHub can merge before checks finish or
-  after they fail.
+  repository must mark every status check that should block a merge as required
+  in its branch protection or ruleset. GitHub waits only for required checks, so
+  an optional check that fails does not block auto-merge. Without a required
+  check, GitHub can merge before checks finish or after they fail.
   The Renovate app must be a ruleset bypass actor on any repo that requires
   reviews, or its PRs wait for a human approval. `automergeType: branch`
   (direct push, no PR) was tried first but stalls forever on any repo whose
