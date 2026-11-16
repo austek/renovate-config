@@ -34,8 +34,10 @@ publish an artifact belongs there, not here.
 - Each dependency jumps straight to its latest major instead of stepping
   through every intermediate one.
 - ZirekHQ, hominux and compress4j bumps automerge and group into one
-  `first-party artifacts` PR and skip the seven-day `minimumReleaseAge`. Both open a PR and Renovate
-  merges it through the API (`platformAutomerge: false`) once checks pass.
+  `first-party artifacts` PR. They skip the seven-day `minimumReleaseAge` and the
+  weekly window, and carry a higher `prPriority` so they open first under the PR
+  limits. Renovate opens a PR and enables native auto-merge
+  (`platformAutomerge: true`), so it merges once checks pass.
   The Renovate app must be a ruleset bypass actor on any repo that requires
   reviews, or its PRs wait for a human approval. `automergeType: branch`
   (direct push, no PR) was tried first but stalls forever on any repo whose
