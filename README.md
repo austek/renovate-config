@@ -55,12 +55,10 @@ publish an artifact belongs there, not here.
   get bumped like any other dependency. Renovate leaves it off by default.
 - `pip_requirements` matches any `requirements*.txt`, including multi-part names
   like `requirements-test-e2e.txt` that the default pattern skips.
-- The `ghcr.io/zizmorcore/zizmor` image uses `minimumReleaseAgeBehaviour:
-  timestamp-optional`. Docker tags carry no release timestamp, so the 7-day
-  age check would otherwise hold its bumps as pending forever.
-  `zizmorcore/zizmor-action` is grouped with that image as `zizmor` and uses
-  `minimumReleaseAge: 0 days`, so the action that knows a zizmor version
-  arrives with it.
+- The `ghcr.io/zizmorcore/zizmor` image is in `ignoreDeps`. Workflows must not
+  set the `version:` input of `zizmorcore/zizmor-action`; the action then runs
+  the zizmor version bundled with its own release. Bumping the image
+  separately opened PRs naming a version the pinned action had no lock for.
 
 ## What it deliberately leaves out
 
