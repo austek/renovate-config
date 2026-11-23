@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests",
+    "helpers:pinGitHubActionDigestsToSemver",
     ":configMigration",
     "schedule:weekly"
   ],
@@ -44,6 +44,17 @@
     ]
   },
   "packageRules": [
+    {
+      "description": "The helper's versioning regex rejects two-component comments such as '# v8.5', so those pins only got digest updates. Accept vX, vX.Y and vX.Y.Z; the helper's extractVersion still makes updates write a full vX.Y.Z comment.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "action",
+        "workflow"
+      ],
+      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+))?(\\.(?<patch>\\d+))?$"
+    },
     {
       "description": "config:recommended maps depType 'dependencies' to 'fix', which publishes a release. Reset to 'chore'; publishing repos re-enable 'fix' explicitly for their own runtime deps.",
       "matchPackageNames": [

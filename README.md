@@ -51,6 +51,12 @@ publish an artifact belongs there, not here.
   transitive/lockfile versions don't rot between direct-dependency bumps.
   Renovate's vulnerability alerts only cover extracted (declared) packages, so
   this is the only path that moves a vulnerable transitive crate.
+- GitHub Actions are pinned to a digest (`helpers:pinGitHubActionDigestsToSemver`).
+  A version update writes a full `vX.Y.Z` comment, and a rule accepts `vX` and
+  `vX.Y` comments as current values so those pins get version updates too. Existing
+  pins are not migrated until they next update, and an initial pin may keep the
+  tag it was created from. A floating comment such as `v8.5` goes stale when the
+  tag moves, and zizmor then flags the pin as mismatched.
 - The `pre-commit` manager is on, so hook `rev`s in `.pre-commit-config.yaml`
   get bumped like any other dependency. Renovate leaves it off by default.
 - `pip_requirements` matches any `requirements*.txt`, including multi-part names

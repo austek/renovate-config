@@ -2,13 +2,14 @@ reviews:
   path_filters:
     - "!.gitignore"
 
-  instructions: |
-    This repo publishes a single Renovate preset (default.json), extended by
-    other repos via `extends: ["github>austek/renovate-config"]`. Treat
-    default.json as the primary review target and README.md as its contract
-    with consumers -- flag drift between the two.
-
   path_instructions:
+    - path: "**"
+      instructions: |
+        This repo publishes a single Renovate preset (default.json), extended by
+        other repos via `extends: ["github>austek/renovate-config"]`. Treat
+        default.json as the primary review target and README.md as its contract
+        with consumers -- flag drift between the two.
+
     - path: "default.json"
       instructions: |
         - Any packageRule with `automergeType: branch` merges directly to the
